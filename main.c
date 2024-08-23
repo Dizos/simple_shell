@@ -6,7 +6,7 @@ int main(int argc, char **argv) {
     return 0;
 }
 
-/* Shell loop: read, parse, and execute*/
+/* Shell loop: read, parse, and execute */
 void shell_loop() {
     char *line;
     char **args;

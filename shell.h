@@ -7,7 +7,7 @@
 #include <unistd.h>
 #include <sys/wait.h>
 
-/*Function prototypes*/
+/*Function prototypes */
 void shell_loop();
 char *read_line();
 char **parse_line(char *line);

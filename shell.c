@@ -1,6 +1,6 @@
 #include "shell.h"
 
-/* Read line from stdin*/
+/* Read line from stdin */
 char *read_line() {
     char *line = NULL;
     size_t bufsize = 0;
@@ -8,7 +8,7 @@ char *read_line() {
     return line;
 }
 
-/* Parse the line into arguments*/
+/* Parse the line into arguments */
 char **parse_line(char *line) {
     int bufsize = 64, position = 0;
     char **tokens = malloc(bufsize * sizeof(char *));
@@ -39,7 +39,7 @@ char **parse_line(char *line) {
     return tokens;
 }
 
-/* Find the full path of the command*/
+/* Find the full path of the command */
 char *find_full_path(char *command) {
     char *path = getenv("PATH");
     char *token = strtok(path, ":");
@@ -62,36 +62,36 @@ int execute(char **args) {
         return 1;
     }
 
-    /* Built-in command: exit*/
+    /* Built-in command: exit */
     if (strcmp(args[0], "exit") == 0) {
         return 0;
     }
 
-    /* Find the full path of the command*/
+    /* Find the full path of the command */
     char *full_path = find_full_path(args[0]);
     if (full_path == NULL) {
         fprintf(stderr, "simple_shell: command not found: %s\n", args[0]);
         return 1;
     }
 
-    /*Fork process*/
+    /*Fork process */
     pid_t pid, wpid;
     int status;
 
     pid = fork();
     if (pid == 0) {
-        /* Child process*/
+        /* Child process */
 
-        /* Using execve instead of execvp*/
+        /* Using execve instead of execvp */
         if (execve(full_path, args, NULL) == -1) {
             perror("simple_shell");
         }
         exit(EXIT_FAILURE);
     } else if (pid < 0) {
-        /* Error forking*/
+        /* Error forking */
         perror("simple_shell");
     } else {
-        /* Parent process*/
+        /* Parent process */
         do {
             wpid = waitpid(pid, &status, WUNTRACED);
         } while (!WIFEXITED(status) && !WIFSIGNALED(status));
