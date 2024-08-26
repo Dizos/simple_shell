@@ -6,13 +6,19 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/wait.h>
+#include <sys/stat.h>
+#include <errno.h>
 
-/*Function prototypes */
-void shell_loop();
-char *read_line();
+#define BUFFER_SIZE 1024
+
+/* Declare environ */
+extern char **environ;
+
+/* Function prototypes */
+void shell_loop(void);
+char *read_line(void);
 char **parse_line(char *line);
 int execute(char **args);
-char *find_full_path(char *command);
+char *find_command(char *command);
 
-#endif /* SHELL_H*/
-
+#endif /* SHELL_H */

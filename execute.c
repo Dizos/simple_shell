@@ -1,28 +1,50 @@
 #include "shell.h"
 
 /**
- * execute_command - Forks a child process to execute a command
- * @command: The command to be executed
+ * execute - Executes a command.
+ * @args: The arguments to execute.
  *
- * Return: void
+ * Return: 1 if the shell should continue, 0 if it should exit.
  */
-void execute_command(const char *command)
+int execute(char **args)
 {
-	pid_t child_pid = fork(); /* Creates a child process */
+	pid_t pid;
+	int status;
+	char *command_path;
 
-	if (child_pid == -1)
+	if (args[0] == NULL)
+		return (1);
+
+	if (strcmp(args[0], "exit") == 0)
+		return (0);
+
+	command_path = find_command(args[0]);
+	if (command_path == NULL)
 	{
-		perror("fork");
-		exit(EXIT_FAILURE);
+		fprintf(stderr, "./hsh: 1: %s: not found\n", args[0]);
+		return (1);
 	}
-	else if (child_pid == 0) /* Child process */
+
+	pid = fork();
+	if (pid == 0)
 	{
-		execve(command, command, (char *)NULL);
-		perror("execve");
-		exit(EXIT_FAILURE);
+		if (execve(command_path, args, environ) == -1)
+		{
+			perror("hsh");
+			exit(EXIT_FAILURE);
+		}
 	}
-	else /* Parent process */
+	else if (pid < 0)
 	{
-		wait(NULL);
+		perror("hsh");
 	}
+	else
+	{
+		do {
+			waitpid(pid, &status, WUNTRACED);
+		} while (!WIFEXITED(status) && !WIFSIGNALED(status));
+	}
+
+	free(command_path);
+	return (1);
 }
