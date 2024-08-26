@@ -34,7 +34,7 @@ void shell_loop(void)
 {
 	char *line;
 	char **args;
-	int status;
+	int status
 
 	do {
 		printf("simple_shell> "); /* Prompt */
