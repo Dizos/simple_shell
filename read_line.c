@@ -1,9 +1,9 @@
 #include "shell.h"
 
 /**
- * read_line - Reads a line from stdin.
+ * read_line - Reads a line from stdin
  *
- * Return: The line read.
+ * Return: The line read
  */
 char *read_line(void)
 {
