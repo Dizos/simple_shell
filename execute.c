@@ -1,38 +1,47 @@
 #include "shell.h"
 
-/* Function to execute a command using fork and execve */
-int execute_command(char *command)
-{
-    pid_t pid;              /* Variable to hold the process ID */
-    char *argv[2];          /* Array to hold the command and NULL terminator */
-    extern char **environ;  /* External variable for the environment */
-
-    pid = fork();           /* Create a new process by forking */
-
-    /* Check if fork failed */
-    if (pid == -1)
-    {
-        perror("Error:");   /* Print an error message if fork fails */
-        return (-1);        /* Return -1 to indicate failure */
+int execute(char **args) {
+    if (args[0] == NULL) {
+        /* An empty command was entered*/
+        return 1;
     }
 
-    /* Child process executes this block */
-    if (pid == 0)
-    {
-        argv[0] = command;  /* Assign the command to the first element of argv */
-        argv[1] = NULL;     /* NULL terminate the argument list */
+    /*Built-in command: exit*/
+    if (strcmp(args[0], "exit") == 0) {
+        return 0;
+    }
 
-        /* Execute the command using execve */
-        if (execve(command, argv, environ) == -1)
-        {
-            printf("./shell: No such file or directory\n");  /* Error message if execve fails */
-            exit(1);         /* Exit the child process with status 1 */
+    /* Find the full path of the command*/
+    char *full_path = find_full_path(args[0]);
+    if (full_path == NULL) {
+        fprintf(stderr, "simple_shell: command not found: %s\n", args[0]);
+        return 1;
+    }
+
+    /* Fork process*/
+    pid_t pid, wpid;
+    int status;
+
+    pid = fork();
+    if (pid == 0) {
+        /*Child process*/
+
+        /* Using execve instead of execvp*/
+        if (execve(full_path, args, NULL) == -1) {
+            perror("simple_shell");
         }
-    }
-    else
-    {
-        wait(NULL);         /* Parent process waits for the child process to finish */
+        exit(EXIT_FAILURE);
+    } else if (pid < 0) {
+        /* Error forking*/
+        perror("simple_shell");
+    } else {
+        /* Parent process*/
+        do {
+            wpid = waitpid(pid, &status, WUNTRACED);
+        } while (!WIFEXITED(status) && !WIFSIGNALED(status));
     }
 
-    return (0);             /* Return 0 to indicate success */
+    free(full_path);
+    return 1;
 }
+
