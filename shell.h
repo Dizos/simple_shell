@@ -5,19 +5,20 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#include <sys/types.h>
 #include <sys/wait.h>
+#include <sys/stat.h>
+#include <errno.h>
 
 #define BUFFER_SIZE 1024
 
-extern char **environ;  /* Add this line */
+/* Declare environ */
+extern char **environ;
 
-void display_prompt(void);
-char *read_command(void);
-int execute_command(char *command);
-void handle_error(const char *error_message);
-
-/* Add any function declarations from shell.c here */
-int launch(char **args);
+/* Function prototypes */
+void shell_loop(void);
+char *read_line(void);
+char **parse_line(char *line);
+int execute(char **args);
+char *find_command(char *command);
 
 #endif /* SHELL_H */

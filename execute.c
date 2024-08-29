@@ -1,33 +1,50 @@
 #include "shell.h"
 
-int execute_command(char *command)
+/**
+ * execute - Executes a command.
+ * @args: The arguments to execute.
+ *
+ * Return: 1 if the shell should continue, 0 if it should exit.
+ */
+int execute(char **args)
 {
-    pid_t pid;
-    char *argv[2];
-    extern char **environ;
+	pid_t pid;
+	int status;
+	char *command_path;
 
-    pid = fork();
+	if (args[0] == NULL)
+		return (1);
 
-    if (pid == -1)
-    {
-        perror("Error:");
-        return (-1);
-    }
+	if (strcmp(args[0], "exit") == 0)
+		return (0);
 
-    if (pid == 0)
-    {
-        argv[0] = command;
-        argv[1] = NULL;
-        if (execve(command, argv, environ) == -1)
-        {
-            printf("./shell: No such file or directory\n");
-            exit(1);
-        }
-    }
-    else
-    {
-        wait(NULL);
-    }
+	command_path = find_command(args[0]);
+	if (command_path == NULL)
+	{
+		fprintf(stderr, "./hsh: 1: %s: not found\n", args[0]);
+		return (1);
+	}
 
-    return (0);
+	pid = fork();
+	if (pid == 0)
+	{
+		if (execve(command_path, args, environ) == -1)
+		{
+			perror("hsh");
+			exit(EXIT_FAILURE);
+		}
+	}
+	else if (pid < 0)
+	{
+		perror("hsh");
+	}
+	else
+	{
+		do {
+			waitpid(pid, &status, WUNTRACED);
+		} while (!WIFEXITED(status) && !WIFSIGNALED(status));
+	}
+
+	free(command_path);
+	return (1);
 }

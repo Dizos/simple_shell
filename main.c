@@ -1,27 +1,17 @@
 #include "shell.h"
 
-int main(void)
+/**
+ * main - Entry point of the shell program.
+ * @argc: Argument count.
+ * @argv: Argument vector.
+ *
+ * Return: 0 on success.
+ */
+int main(int argc, char **argv)
 {
-    char *command;
+	(void)argc;
+	(void)argv;
 
-    while (1)
-    {
-        display_prompt();
-        command = read_command();
-
-        if (command == NULL)
-        {
-            printf("\n");
-            break;
-        }
-
-        if (execute_command(command) == -1)
-        {
-            break;
-        }
-
-        free(command);
-    }
-
-    return (0);
+	shell_loop();
+	return (0);
 }
