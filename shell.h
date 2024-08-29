@@ -1,18 +1,22 @@
 #ifndef SHELL_H
 #define SHELL_H
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-#include <sys/types.h>
-#include <sys/wait.h>
+/* Standard library headers */
+#include <stdio.h>      /* For standard input/output functions */
+#include <stdlib.h>     /* For memory allocation, process control, etc. */
+#include <string.h>     /* For string manipulation functions */
+#include <unistd.h>     /* For POSIX operating system API functions */
+#include <sys/types.h>  /* For data types used in system calls */
+#include <sys/wait.h>   /* For waiting on child processes */
 
-#define BUFFER_SIZE 1024
+/* Macro definition */
+#define BUFFER_SIZE 1024  /* Define a constant for buffer size */
 
-void display_prompt(void);
-char *read_command(void);
-int execute_command(char *command);
-void handle_error(const char *error_message);
+/* Function prototypes */
+void display_prompt(void);                  /* Function to display the shell prompt */
+char *read_command(void);                   /* Function to read a command from the user */
+int execute_command(char *command);         /* Function to execute the user command */
+void handle_error(const char *error_message); /* Function to handle errors (prototype) */
 
 #endif /* SHELL_H */
+
