@@ -1,10 +1,10 @@
 #include "shell.h"
 
 /**
- * execute - Executes a command.
- * @args: The arguments to execute.
+ * execute - Executes a command
+ * @args: The arguments to execute
  *
- * Return: 1 if the shell should continue, 0 if it should exit.
+ * Return: 1 if the shell should continue, 0 if it should exit
  */
 int execute(char **args)
 {
