@@ -1,8 +1,9 @@
 #include "shell.h"
 
 /**
- * shell_loop - The main loop that reads, parses, and executes commands.
+ * shell_loop - The main loop reads, parses, and executes commands
  */
+
 void shell_loop(void)
 {
 	char *line;
