@@ -1,11 +1,11 @@
 #include "shell.h"
 
 /**
- * main - Entry point of the shell program.
- * @argc: Argument count.
- * @argv: Argument vector.
+ * main - Entry point of the shell program
+ * @argc: Argument count
+ * @argv: Argument vector
  *
- * Return: 0 on success.
+ * Return: 0 on success
  */
 int main(int argc, char **argv)
 {
