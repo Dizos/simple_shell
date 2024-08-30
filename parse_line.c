@@ -1,11 +1,12 @@
 #include "shell.h"
 
 /**
- * parse_line - Parses the line into arguments.
- * @line: The line to parse.
+ * parse_line - Parses the line into arguments
+ * @line: The line to parse
  *
- * Return: An array of arguments.
+ * Return: An array of arguments
  */
+
 char **parse_line(char *line)
 {
 	int bufsize = BUFFER_SIZE, position = 0;
